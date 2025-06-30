@@ -42,38 +42,26 @@ const Calculator = () => {
 		}
 
 		if ([...OPERATIONS, "/", "*"].includes(input)) {
-			const expression = flag
-				? `${display} ${operation} ${memory}`
-				: `${memory} ${operation} ${display}`;
-			const value = display ? eval(expression) : 0;
 			if (!flag) {
 				setMemory(display || "0");
 			}
-			if (input !== "=") {
-				if (memory && operation && display) {
-					setHistory((curr) => [
-						{
-							expression,
-							value,
-						},
-						...curr,
-					]);
-					setDisplay(value);
-				}
-				setOperation(input);
-			} else {
-				if (memory && operation && display) {
-					setHistory((curr) => [
-						{
-							expression,
-							value,
-						},
-						...curr,
-					]);
-					setDisplay(value);
-				}
+
+			if (memory && operation && display) {
+				const expression = flag
+					? `${display} ${operation} ${memory}`
+					: `${memory} ${operation} ${display}`;
+				const value = display ? eval(expression) : 0;
+				setHistory((curr) => [
+					{
+						expression,
+						value,
+					},
+					...curr,
+				]);
+				setDisplay(value);
 			}
-			setFlag(true);
+			setOperation(input === "=" ? "" : input);
+			setFlag(input !== "=");
 		} else {
 			if (input === ".") {
 				setDisplay((curr) =>
